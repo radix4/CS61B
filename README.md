@@ -1,4 +1,4 @@
 # CS61B
-UC Berkeley - CS 61B Spring 2018
+UC Berkeley - CS 61B Data Structures, Spring 2018
 
-Starting date: 5/27/2020
+Start date: 5/27/2020
