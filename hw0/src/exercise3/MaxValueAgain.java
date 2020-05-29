@@ -1,6 +1,6 @@
-package exercise2;
+package exercise3;
 
-public class ReturnMaxValue {
+public class MaxValueAgain {
 
     public static void main(String[] args) {
         int[] numbers = new int[]{9, 2, 15, 2, 22, 10, 6};
@@ -10,11 +10,13 @@ public class ReturnMaxValue {
     /** Returns the maximum value from m integer array. */
     public static int max(int[] m) {
         int max = m[0];
+        int i = 1;
 
-        for(int i = 1; i < m.length; i++){
+        while(i < m.length){
             if (max < m[i]){
                 max = m[i];
             }
+            i++;
         }
 
         return max;
