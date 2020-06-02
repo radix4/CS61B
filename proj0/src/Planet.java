@@ -32,9 +32,39 @@ public class Planet {
     }
 
 
-    /** update the planet's position and velocity instance variables*/
+    /** update the planet's position and velocity instance variables
+     * velocityX = */
     public void update(double dt, double fX, double fY){
+        double currentXPos = xxPos,
+                currentYPos = yyPos,
+                currentXVel = xxVel,
+                currentYVel = yyVel;
 
+        double accelerationX = acceleration(fX, mass);
+        double accelerationY = acceleration(fY, mass);
+
+        xxVel = newVel(currentXVel, accelerationX, dt);
+        yyVel = newVel(currentYVel, accelerationY, dt);
+
+        xxPos = newPosition(currentXPos,xxVel,dt);
+        yyPos = newPosition(currentYPos,yyVel,dt);
+
+    }
+
+    /** newPos = Px + dt * Vx */
+    public double newPosition(double currentPos, double newVel, double dt){
+        return currentPos + newVel * dt;
+    }
+
+    /** (Vx + dt * Ax, Vy + dy * Ay)
+     * Vx = xxVel*/
+    public double newVel(double currentVel, double acceleration, double dt){
+        return currentVel + acceleration * dt;
+    }
+
+    /** accelerationX = fX / m. (x direction) */
+    public double acceleration(double force, double mass){
+        return force / mass;
     }
 
     /** Calculates the net force(in x direction) exerted by all surrounding planets
@@ -56,7 +86,7 @@ public class Planet {
             netForceX += (gForce * dx) / r;
         }
 
-        return (double)Math.round(netForceX * 10) / 10;
+        return netForceX;
     }
 
     /** Calculates the net force(in y direction) exerted by all surrounding planets
@@ -78,7 +108,7 @@ public class Planet {
             netForceY += (gForce * dy) / r;
         }
 
-        return (double)Math.round(netForceY * 10) /10;
+        return netForceY;
     }
 
 
