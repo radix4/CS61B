@@ -1,3 +1,5 @@
+import examples.StdDraw;
+
 /** This program mimics the universe by applying Newton's law of universal gravitation
  * @author Thang Cao
  * @date 06/01/2020
@@ -29,6 +31,11 @@ public class Planet {
         this.yyVel = p.yyVel;
         this.mass = p.mass;
         this.imgFileName = p.imgFileName;
+    }
+
+    public void draw(){
+        StdDraw.picture(xxPos,yyPos,"images/" + imgFileName);
+        StdDraw.show();
     }
 
 

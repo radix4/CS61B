@@ -25,7 +25,7 @@ public class TestReadRadius {
      */
     private static void checkReadRadius() {
         System.out.println("Checking readRadius...");
-        String planetsTxtPath = "./data/planets.txt";
+        String planetsTxtPath = "data/planets.txt";
         /* If the following line fails to compile, you probably need to make
          * a certain method static! */
         double actualOutput = NBody.readRadius(planetsTxtPath);
