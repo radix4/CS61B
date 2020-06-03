@@ -1,13 +1,12 @@
 import examples.StdDraw;
-import examples.StdRandom;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/** This program mimics the universe by applying Newton's law of universal gravitation
+ * @author Thang Cao
+ * @date 06/01/2020
+ * */
 public class NBody {
 
     public static void main(String[] args) {
-
 
         if (args.length == 0) {
             System.out.println("Invalid input!");
