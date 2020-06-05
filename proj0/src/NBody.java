@@ -20,6 +20,7 @@ public class NBody {
         double radius = readRadius(fileName);
         Planet[] planets = readPlanets(fileName);
 
+
         StdDraw.enableDoubleBuffering();
         StdDraw.setScale(-radius,radius);
 
@@ -42,22 +43,15 @@ public class NBody {
             }
 
             StdDraw.show();
-            StdDraw.pause(5);
+            StdDraw.pause(10);
         }
     }
 
 
     public static double readRadius(String textName){
         In in = new In(textName);
-        double radius = 0;
-
-        for (int i = 1; i < 3; i++){
-            if (i == 2){
-                radius = in.readDouble();
-            }
-
-            String s = in.readString();
-        }
+        int numOfPlanets = in.readInt();
+        double radius = in.readDouble();
 
         return radius;
     }

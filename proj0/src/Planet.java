@@ -35,7 +35,7 @@ public class Planet {
 
     public void draw(){
         StdDraw.picture(xxPos,yyPos,"images/" + imgFileName);
-        StdDraw.show();
+       // StdDraw.show(); causes drawing to shutter
     }
 
 
