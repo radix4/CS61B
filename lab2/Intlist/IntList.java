@@ -83,7 +83,25 @@ public class IntList {
     public static IntList dcatenate(IntList A, IntList B) {
         //TODO:  fill in method
 
-        return null;
+        /** Iterative
+        if (A == null){
+            A = B;
+            return A;
+        }
+        IntList C = A;
+        while (C.rest != null){     //iterate to the last null pointer
+            C = C.rest;
+        }
+        C.rest = B; // points the null to the B list
+        return A; // now A points to both A thru B */
+
+        /** Recursive */
+        if (A.rest == null)
+            A.rest = B;
+        else
+            A.rest = dcatenate(A.rest,B);
+        return A;
+
     }
 
     /**
@@ -92,7 +110,34 @@ public class IntList {
      */
     public static IntList catenate(IntList A, IntList B) {
         //TODO:  fill in method
-        return null;
+
+        /** Iterative */
+         IntList result = new IntList();
+         IntList temp = result;
+
+         while(A != null){ // iterate thru list A
+             temp.rest = new IntList(A.first, null);
+             A = A.rest;
+             temp = temp.rest;
+         }
+
+         while(B != null) {  // iterate thru list B
+             temp.rest = new IntList(B.first, null);
+             B = B.rest;
+             temp = temp.rest;
+         }
+
+         result = result.rest; // to exclude initial '0'
+
+         return result;
+
+
+        /** Recursive
+        if(A.rest == null) {
+            return new IntList(A.first, B);
+        }
+
+        return new IntList(A.first,catenate(A.rest,B)); */
     }
 
 
