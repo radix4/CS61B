@@ -43,7 +43,7 @@ public class NBody {
             }
 
             StdDraw.show();
-            StdDraw.pause(10);
+            StdDraw.pause(5);
         }
     }
 
