@@ -131,9 +131,4 @@ public class LinkedListDeque<T> {
     public T getRecursive(int index) {
         return getHelper(sentinel.next,index);
     }
-
-    public static void main(String[] args) {
-        LinkedListDeque<Integer> list = new LinkedListDeque<>();
-        System.out.println(list.getFirst());
-    }
 }

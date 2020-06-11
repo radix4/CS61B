@@ -193,26 +193,4 @@ public class ArrayDeque<T> implements DequeAPI<T>{
 
         return temp[index];
     }
-
-    public static void main(String[] args) {
-        ArrayDeque<Integer> items = new ArrayDeque<>();
-        items.addFirst(4);
-        items.addFirst(3);
-        items.addFirst(2);
-        items.addFirst(1);
-        items.addFirst(0);
-        items.addLast(5);
-        items.addLast(6);
-        items.addLast(7);
-        items.addLast(8);
-        items.addLast(9);
-        items.addFirst(-1);
-        items.addFirst(-2);
-
-
-        System.out.println(items.get(3));
-
-        items.printDeque();
-
-    }
 }
