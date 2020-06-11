@@ -1,3 +1,4 @@
+
 /**
  * This program demonstrates the double ended queue similar to SLList and AList
  *
@@ -96,7 +97,7 @@ public class LinkedListDeque<T> {
     }
 
     public T removeFirst() {
-        if (sentinel.next == null) {
+        if (sentinel.next == null || isEmpty()) {
             return null;
         }
 
@@ -112,7 +113,7 @@ public class LinkedListDeque<T> {
     }
 
     public T removeLast() {
-        if (sentinel.prev == null) {
+        if (sentinel.prev == null || isEmpty()) {
             return null;
         }
 
@@ -146,5 +147,14 @@ public class LinkedListDeque<T> {
 
     public T getRecursive(int index) {
         return getHelper(sentinel.next, index);
+    }
+
+    public static void main(String[] args) {
+        LinkedListDeque<Integer> list = new LinkedListDeque<>();
+        list.addFirst(1);
+        list.addFirst(2);
+        System.out.println(list.removeLast());
+        System.out.println(list.removeFirst());
+        System.out.println(list.size());
     }
 }

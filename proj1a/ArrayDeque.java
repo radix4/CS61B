@@ -1,3 +1,4 @@
+
 /**
  * This program demonstrates the implementation of an array-based List
  *
@@ -178,15 +179,34 @@ public class ArrayDeque<T> {
 
     }
 
+
+    /** Check if first or last pointer is empty. */
+    private boolean firstOrLastEmpty(){
+        return (nextFirst == items.length - 1 || nextLast == 0);
+    }
+
     /**
      * Remove the first item in the deque.
      */
-
     public T removeFirst() {
-        T toBeRemoved = items[nextFirst];
-        items[nextFirst] = null;
-        size--;
-        nextFirst++;
+        if (isEmpty()){
+            return null;
+        }
+
+        T toBeRemoved;
+
+        if (firstOrLastEmpty()){
+            nextFirst = 0;
+            toBeRemoved = items[nextFirst];
+            items[nextFirst] = null;
+
+        } else {
+            toBeRemoved = items[nextFirst + 1];
+            items[nextFirst + 1] = null;
+            nextFirst = plusOne(nextFirst);
+        }
+        size = minusOne(size);
+        nextFirst = plusOne(nextFirst);
 
         if (isArrayTooLarge()) {
             shrinkSize();
@@ -201,10 +221,10 @@ public class ArrayDeque<T> {
      */
 
     public T removeLast() {
-        T tobeRemoved = items[nextLast];
-        items[nextLast] = null;
-        nextLast--;
-        size--;
+        T tobeRemoved = items[nextLast-1];
+        items[nextLast-1] = null;
+        nextLast = minusOne(nextLast);
+        size = minusOne(size);
 
         if (isArrayTooLarge()) {
             shrinkSize();
@@ -221,5 +241,14 @@ public class ArrayDeque<T> {
         T[] temp = tempSortedArray();
 
         return temp[index];
+    }
+
+    public static void main(String[] args) {
+        ArrayDeque<Integer> deque = new ArrayDeque<>();
+        deque.addLast(0);
+        deque.addLast(1);
+        deque.addLast(2);
+        System.out.println(deque.removeFirst());
+
     }
 }
