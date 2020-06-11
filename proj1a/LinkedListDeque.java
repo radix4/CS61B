@@ -151,9 +151,7 @@ public class LinkedListDeque<T> {
 
     public static void main(String[] args) {
         LinkedListDeque<Integer> list = new LinkedListDeque<>();
-        list.addFirst(1);
-        list.addFirst(2);
-        System.out.println(list.removeLast());
+        list.addFirst(0);
         System.out.println(list.removeFirst());
         System.out.println(list.size());
     }

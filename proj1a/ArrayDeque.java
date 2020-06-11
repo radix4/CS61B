@@ -80,7 +80,11 @@ public class ArrayDeque<T> {
      * Decrement the given index by one.
      */
     private int minusOne(int index) {
-        index--;
+        if (index == 0) {
+            index = items.length - 1;
+        } else {
+            index--;
+        }
 
         return index;
     }
@@ -89,7 +93,11 @@ public class ArrayDeque<T> {
      * Increment the given index by one.
      */
     private int plusOne(int index) {
-        index++;
+        if (index == items.length - 1) {
+            index = 0;
+        } else {
+            index++;
+        }
 
         return index;
     }
@@ -181,8 +189,8 @@ public class ArrayDeque<T> {
 
 
     /** Check if first or last pointer is empty. */
-    private boolean firstOrLastEmpty(){
-        return (nextFirst == items.length - 1 || nextLast == 0);
+    private boolean nextFirstEmpty(){
+        return (items[nextFirst + 1] == null);
     }
 
     /**
@@ -195,18 +203,17 @@ public class ArrayDeque<T> {
 
         T toBeRemoved;
 
-        if (firstOrLastEmpty()){
-            nextFirst = 0;
+        if (nextFirstEmpty()){
+            nextFirst = minusOne(nextFirst);
             toBeRemoved = items[nextFirst];
             items[nextFirst] = null;
 
         } else {
-            toBeRemoved = items[nextFirst + 1];
-            items[nextFirst + 1] = null;
+            toBeRemoved = items[plusOne(nextFirst)];
+            items[plusOne(nextFirst)] = null;
             nextFirst = plusOne(nextFirst);
         }
         size = minusOne(size);
-        nextFirst = plusOne(nextFirst);
 
         if (isArrayTooLarge()) {
             shrinkSize();
@@ -215,22 +222,39 @@ public class ArrayDeque<T> {
         return toBeRemoved;
     }
 
+
+    private boolean isNextLastEmpty(){
+
+        return (items[minusOne(nextLast)] == null);
+    }
+
     /**
      * Remove the last item in the deque.
      * Check if array is too large (for efficiency).
      */
-
     public T removeLast() {
-        T tobeRemoved = items[nextLast-1];
-        items[nextLast-1] = null;
-        nextLast = minusOne(nextLast);
+        if (isEmpty()){
+            return null;
+        }
+
+        T toBeRemoved;
+
+        if (isNextLastEmpty()) {
+            nextLast = minusOne(nextLast);
+            toBeRemoved = items[nextLast];
+            items[nextLast] = null;
+        } else {
+            toBeRemoved = items[minusOne(nextLast)];
+            items[minusOne(nextLast)] = null;
+            nextLast = minusOne(nextLast);
+        }
         size = minusOne(size);
 
         if (isArrayTooLarge()) {
             shrinkSize();
         }
 
-        return tobeRemoved;
+        return toBeRemoved;
     }
 
     /**
@@ -245,10 +269,15 @@ public class ArrayDeque<T> {
 
     public static void main(String[] args) {
         ArrayDeque<Integer> deque = new ArrayDeque<>();
-        deque.addLast(0);
-        deque.addLast(1);
-        deque.addLast(2);
+        deque.addFirst(0);
+        deque.addFirst(1);
+        deque.addFirst(2);
+        deque.addFirst(3);
+        System.out.println(deque.removeLast());
         System.out.println(deque.removeFirst());
+        System.out.println(deque.removeFirst());
+        System.out.println(deque.removeLast());
+        System.out.println(deque.removeLast());
 
     }
 }
