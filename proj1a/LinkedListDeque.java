@@ -149,10 +149,4 @@ public class LinkedListDeque<T> {
         return getHelper(sentinel.next, index);
     }
 
-    public static void main(String[] args) {
-        LinkedListDeque<Integer> list = new LinkedListDeque<>();
-        list.addFirst(0);
-        System.out.println(list.removeFirst());
-        System.out.println(list.size());
-    }
 }
