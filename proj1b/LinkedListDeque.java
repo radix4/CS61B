@@ -6,7 +6,7 @@
  * @since 06/05/2020
  */
 
-public class LinkedListDeque<T> implements Deque<T>{
+public class LinkedListDeque<T> implements Deque<T> {
 
     /**
      * IntNode nested class (supports LinkedListDeque class)
