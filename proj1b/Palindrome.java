@@ -45,6 +45,28 @@ public class Palindrome {
         return true;
     }
 
+    /** Returns true if word is a off-by-one palindrome. */
+    public boolean isPalindrome(String word, CharacterComparator cc){
+        Deque<Character> a = wordToDeque(word);
+        Deque<Character> b = reverseDeque(word);
+
+        for (int i = 0; i < word.length(); i++) {
+            if (word.length() % 2 != 0) {
+                if (i == word.length()/2){
+                    a.removeFirst();
+                    b.removeFirst();
+                    continue;
+                }
+            }
+
+            if (!cc.equalChars(a.removeFirst(),b.removeFirst())){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static void main(String[] args) {
         Palindrome p = new Palindrome();
         System.out.println(p.isPalindrome(""));
