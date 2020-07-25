@@ -12,7 +12,7 @@ import java.awt.Font;
  * allowing scrolling of the screen or tracking the player or something similar.
  */
 public class TERenderer {
-    private static final int TILE_SIZE = 16;
+    private static final int TILE_SIZE = 16;    // 16 pixels
     private int width;
     private int height;
     private int xOffset;
