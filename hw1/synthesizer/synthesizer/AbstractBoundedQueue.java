@@ -19,9 +19,7 @@ public abstract class AbstractBoundedQueue<T> implements BoundedQueue<T> {
     }
 
     @Override
-    public void enqueue(T x) {
-
-    }
+    public abstract void enqueue(T x);
 
     @Override
     public abstract T dequeue();
@@ -31,11 +29,11 @@ public abstract class AbstractBoundedQueue<T> implements BoundedQueue<T> {
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return fillCount == 0;
     }
 
     @Override
     public boolean isFull() {
-        return false;
+        return fillCount == capacity;
     }
 }
