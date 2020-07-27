@@ -101,7 +101,13 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T>{
             throw new RuntimeException("Ring buffer underflow");
         }
 
-        return bufferData[first];
+        if (first == capacity){
+            first = 0;
+            return bufferData[first];
+        }
+
+        return bufferData[first + 1];
+
     }
 
     // TODO: When you get to part 5, implement the needed code to support iteration.
