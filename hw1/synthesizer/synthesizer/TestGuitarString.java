@@ -55,6 +55,22 @@ public class TestGuitarString {
 
     /** Calls tests for GuitarString. */
     public static void main(String[] args) {
-        jh61b.junit.textui.runClasses(TestGuitarString.class);
+        //jh61b.junit.textui.runClasses(TestGuitarString.class);
+
+        double CONCERT_A = 440.0;
+        GuitarString aString = new GuitarString(CONCERT_A);
+        aString.pluck();
+        for (int i = 0; i < 50000; i += 1) {
+            StdAudio.play(aString.sample());
+            aString.tic();
+        }
+
+        double CONCERT_B = 440.0;
+        GuitarString bString = new GuitarString(CONCERT_B);
+        bString.pluck();
+        for (int i = 0; i < 50000; i += 1) {
+            StdAudio.play(bString.sample());
+            bString.tic();
+        }
     }
 } 
