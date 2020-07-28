@@ -1,3 +1,5 @@
+package synthesizer;
+
 public abstract class AbstractBoundedQueue<T> implements BoundedQueue<T> {
 
     /** protected keyword means only subclasses of this class

@@ -1,3 +1,5 @@
+package synthesizer;
+
 /**
  * This code does some stuff. Run it (with sound on!) to find out what stuff it does!
  * Requires completion of CS 61B Homework 1.
@@ -7,9 +9,9 @@
 public class TTFAF {
     public static void main(String[] args) {
         /*try {
-            InputStream source = new ByteArrayInputStream(Base64.getDecoder().decode(TTFAF));
+            InputStream source = new ByteArrayInputStream(Base64.getDecoder().decode(synthesizer.TTFAF));
             source = new GZIPInputStream(source);
-            GuitarPlayer player = new GuitarPlayer(source);
+            synthesizer.GuitarPlayer player = new synthesizer.GuitarPlayer(source);
             player.play();
         } catch (IOException e) {
             e.printStackTrace();

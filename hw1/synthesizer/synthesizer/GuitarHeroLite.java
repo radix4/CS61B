@@ -1,3 +1,5 @@
+package synthesizer;
+
 import edu.princeton.cs.introcs.StdAudio;
 import edu.princeton.cs.introcs.StdDraw;
 

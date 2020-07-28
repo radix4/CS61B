@@ -1,4 +1,4 @@
-
+package synthesizer;
 /* Since this test is part of a package, we have to import the package version of StdAudio. */
 /* Don't worry too much about this, we'll get there in due time. */
 import edu.princeton.cs.introcs.StdAudio;
@@ -6,7 +6,7 @@ import edu.princeton.cs.introcs.StdAudio;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/** Tests the GuitarString class.
+/** Tests the synthesizer.GuitarString class.
  *  @author Josh Hug
  */
 
@@ -25,8 +25,8 @@ public class TestGuitarString {
 
     @Test
     public void testTic() {
-        // Create a GuitarString of frequency 11025, which
-        // is an ArrayRingBuffer of length 4. 
+        // Create a synthesizer.GuitarString of frequency 11025, which
+        // is an synthesizer.ArrayRingBuffer of length 4.
         GuitarString s = new GuitarString(11025);
         s.pluck();
 
@@ -53,9 +53,9 @@ public class TestGuitarString {
     }
 
 
-    /** Calls tests for GuitarString. */
+    /** Calls tests for synthesizer.GuitarString. */
     public static void main(String[] args) {
-        //jh61b.junit.textui.runClasses(TestGuitarString.class);
+        //jh61b.junit.textui.runClasses(synthesizer.TestGuitarString.class);
 
         double CONCERT_A = 440.0;
         GuitarString aString = new GuitarString(CONCERT_A);

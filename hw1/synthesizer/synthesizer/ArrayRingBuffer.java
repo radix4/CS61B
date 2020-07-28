@@ -1,4 +1,4 @@
-// TODO: Make sure to make this class a part of the synthesizer package
+package synthesizer;// TODO: Make sure to make this class a part of the synthesizer package
 
 import java.util.Iterator;
 
@@ -10,7 +10,7 @@ import java.util.Iterator;
  * */
 
 //TODO: Make sure to make this class and all of its methods public
-//TODO: Make sure to make this class extend AbstractBoundedQueue<t>
+//TODO: Make sure to make this class extend synthesizer.AbstractBoundedQueue<t>
 public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T>{
     /* Index for the next dequeue or peek. */
     private int first;
@@ -20,18 +20,18 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T>{
     private T[] bufferData;
 
     /**
-     * Create a new ArrayRingBuffer with the given capacity.
+     * Create a new synthesizer.ArrayRingBuffer with the given capacity.
      */
     public ArrayRingBuffer(int capacity) {
         // TODO: Create new array with capacity elements.
         //       first, last, and fillCount should all be set to 0.
         //       this.capacity should be set appropriately. Note that the local variable
-        //       here shadows the field we inherit from AbstractBoundedQueue, so
+        //       here shadows the field we inherit from synthesizer.AbstractBoundedQueue, so
         //       you'll need to use this.capacity to set the capacity.
 
         this.first = 0;
         this.last = 0;
-        this.fillCount = 0; // protected variable from the AbstractBoundedQueue abstract class
+        this.fillCount = 0; // protected variable from the synthesizer.AbstractBoundedQueue abstract class
         this.capacity = capacity;
         this.bufferData = (T[]) new Object[capacity];
     }
