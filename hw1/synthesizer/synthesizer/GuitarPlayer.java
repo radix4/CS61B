@@ -1,3 +1,5 @@
+package synthesizer;
+
 import edu.princeton.cs.algs4.StdAudio;
 import synthesizer.GuitarString;
 
