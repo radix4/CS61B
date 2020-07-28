@@ -1,5 +1,3 @@
-package synthesizer;
-
 import java.util.Iterator;
 
 /** An interface cannot implements another interface

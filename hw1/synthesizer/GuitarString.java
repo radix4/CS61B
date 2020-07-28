@@ -1,5 +1,4 @@
 // TODO: Make sure to make this class a part of the synthesizer package
-package synthesizer;
 
 /**
  * This program plays the sound using the Karplus-Strong algorithm.
