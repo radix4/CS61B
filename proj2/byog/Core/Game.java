@@ -2,6 +2,7 @@ package byog.Core;
 
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
+import byog.TileEngine.Tileset;
 
 public class Game {
     TERenderer ter = new TERenderer();
@@ -32,7 +33,30 @@ public class Game {
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
 
-        TETile[][] finalWorldFrame = null;
+
+        TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
+        Game game = new Game();
+
+        game.initializeFrame(); // creates a gui window with given Width and Height.
+        game.initializeTiles(finalWorldFrame);  // renders the gui window with black tiles.
+
+        /* Draws the 2D array world to the screen */
+        ter.renderFrame(finalWorldFrame);
+
         return finalWorldFrame;
+    }
+
+    /** Creates the dimension of the gui window. */
+    public void initializeFrame(){
+        ter.initialize(WIDTH, HEIGHT);
+    }
+
+    /** Renders the window with black tiles. */
+    public void initializeTiles(TETile[][] world){
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+                world[x][y] = Tileset.NOTHING;
+            }
+        }
     }
 }

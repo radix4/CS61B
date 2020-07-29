@@ -59,6 +59,7 @@ public class TETile {
         this.backgroundColor = backgroundColor;
         this.description = description;
         this.filepath = null;
+        // OR --> this(character,textColor,backgroundColor,description,null);
     }
 
     /**
