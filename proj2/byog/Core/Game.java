@@ -4,11 +4,24 @@ import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Game {
     TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
+
+    private List<Position[]> allPieces ;
+    private Map<Position[], RectangularRoom> allRooms = new HashMap<>();
+
+    public Game() {
+        this.allPieces = new ArrayList<>();
+    }
+
 
     /** Creates the dimension of the gui window. */
     public void initializeFrame(){
@@ -30,6 +43,11 @@ public class Game {
         int width = randomWidthHeight[0];
         int height = randomWidthHeight[1];
         return new RectangularRoom(width,height);
+    }
+
+    /** Circumference of the shapes. */
+    private Position[] circumference(Position bottomLeft, Position topRight) {
+        return new Position[] {bottomLeft, topRight};
     }
 
 
@@ -58,21 +76,43 @@ public class Game {
         }
     }
 
-    /** Renders many rooms across the GUI window.
-     * Always starts from the bottom left corner of the GUI window. */
+    /** Randomly renders a bunch of rooms across the GUI window.
+     * Always starts from the bottom left corner (0,0) of the GUI window. */
     public void aBunchOfRooms(TETile[][] world){
-        int xCoordinate = 0;
-        int yCoordinate = 0;
+        for (int y = 0; y < HEIGHT; y += 10) {
+            for (int x = 0; x < WIDTH; x += 10) {
+                Position[] piece = new Position[2];
+                piece[0] = new Position(x,y);
+                piece[1] = new Position(x + 10, y + 10);
+                allPieces.add(piece);
 
-        for (int y = yCoordinate; y < HEIGHT; y += 10) {
-            for (int x = xCoordinate; x < WIDTH; x += 10) {
                 RectangularRoom room = randomSizedRoom();
-                Position bottomLeft = new Position(x,y);
-                room.setBottomLeft(bottomLeft);
-                addRectangularRoom(room, world);
+
+                Position randomCoordinate = Logic.randomCoordinate();
+                randomCoordinate.setX(randomCoordinate.getX() + x); // add x or y to get to the current piece
+                randomCoordinate.setY(randomCoordinate.getY() + y);
+
+                int randomX = randomCoordinate.getX();
+                int randomY = randomCoordinate.getY();
+                int width = room.getWidth();
+                int height = room.getHeight();
+
+                Position bottomLeft = new Position(randomX,randomY);
+                Position topRight = new Position(randomX + width, randomY + height);
+
+                Position pieceTopRight = new Position(x + 10, y + 10);
+
+                if (Logic.isRoomInsideThePiece(topRight,pieceTopRight)) {
+                    room.setBottomLeft(bottomLeft);
+                    room.setTopRight(topRight);
+                    addRectangularRoom(room, world);
+                }
             }
         }
     }
+
+
+
 
 
     /**

@@ -35,4 +35,5 @@ public class RectangularRoom {
     public int getHeight() {
         return height;
     }
+
 }

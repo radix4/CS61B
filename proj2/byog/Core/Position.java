@@ -1,6 +1,6 @@
 package byog.Core;
 
-public class Position {
+public class Position implements Comparable<Position>{
     private int x;
     private int y;
 
@@ -23,5 +23,17 @@ public class Position {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    /** If this is > than o, returns 1. */
+    @Override
+    public int compareTo(Position o) {
+        if (this.x - o.getX() > 0 && this.y - o.getY() > 0) {
+            return 1;
+        } else if (this.x - o.getX() < 0 && this.y - o.getY() < 0) {
+            return -1;
+        }
+
+        return 0;
     }
 }
