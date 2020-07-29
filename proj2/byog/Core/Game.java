@@ -4,8 +4,6 @@ import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
-import java.util.Random;
-
 public class Game {
     TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
@@ -26,69 +24,24 @@ public class Game {
         }
     }
 
-    /** Renders many rooms across the GUI window.
-     * Always starts from the bottom left corner of the GUI window. */
-    public void aBunchOfRooms(TETile[][] world){
-        int xCoordinate = 0;
-        int yCoordinate = 0;
-
-        for (int y = yCoordinate; y < HEIGHT; y += 10) {
-            for (int x = xCoordinate; x < WIDTH; x += 10) {
-                int[] randomWidthHeight = randomWidthAndHeightGenerator();
-                addRectangularRoom(x,y,randomWidthHeight[0],randomWidthHeight[1],world);
-            }
-        }
+    /** Return a random sized room without coordinates. */
+    private RectangularRoom randomSizedRoom() {
+        int[] randomWidthHeight = Logic.randomWidthAndHeightGenerator();
+        int width = randomWidthHeight[0];
+        int height = randomWidthHeight[1];
+        return new RectangularRoom(width,height);
     }
 
-    /** Return an array of size two containing random width and height of the room. */
-    public int[] randomWidthAndHeightGenerator(){
-        int lowerBound = 4;
-        int upperBound = 10;
 
-        Random random = new Random();
+    /** Renders a rectangular room into the world demo. */
+    public void addRectangularRoom(RectangularRoom room, TETile[][] world) {
+        int xCoordinate = room.getBottomLeft().getX();
+        int yCoordinate = room.getBottomLeft().getY();
+        int width = room.getWidth();
+        int height = room.getHeight();
 
-        int width = RandomUtils.uniform(random, lowerBound,upperBound);
-        int height = RandomUtils.uniform(random, lowerBound,upperBound);
 
-        return new int[]{width,height};
-    }
-
-    /** Return an array of size two containing random x and y coordinates
-     * between 0 and 9. */
-    public int[] randomXYGenerator(){
-        int lowerBound = 0;
-        int upperBound = 9;
-
-        Random random = new Random();
-
-        int x = RandomUtils.uniform(random, lowerBound,upperBound);
-        int y = RandomUtils.uniform(random, lowerBound,upperBound);
-
-        return new int[]{x,y};
-    }
-
-    /** Renders a square into the world demo. */
-    public void addSquaredRoom(int xCoordinate, int yCoordinate, int size, TETile[][] world) {
-        if (yCoordinate + size >= HEIGHT || xCoordinate + size >= WIDTH){
-            return;
-        }
-
-        for (int x = xCoordinate; x < xCoordinate + size; x++) {
-            for (int y = yCoordinate; y < yCoordinate + size; y++) {
-                world[x][y] = Tileset.WALL;
-            }
-        }
-
-        for (int x = xCoordinate + 1; x < xCoordinate + size - 1; x++) {
-            for (int y = yCoordinate + 1; y < yCoordinate + size - 1; y++) {
-                world[x][y] = Tileset.FLOOR;
-            }
-        }
-    }
-
-    /** Renders a square into the world demo. */
-    public void addRectangularRoom(int xCoordinate, int yCoordinate, int width, int height, TETile[][] world) {
-        if (yCoordinate + height >= HEIGHT || xCoordinate + width >= WIDTH){
+        if (xCoordinate + width >= WIDTH || yCoordinate + height >= HEIGHT){
             return;
         }
 
@@ -105,14 +58,22 @@ public class Game {
         }
     }
 
-    /** Renders a square into the world demo.
-     * Size of each piece is 10x10.
-     * Ex: (0, 9) */
-    public void splitScreen(TETile[][] world) {
-        world[0][0] = Tileset.TREE;
-        world[0][10] = Tileset.TREE;
-        world[0][20] = Tileset.TREE;
+    /** Renders many rooms across the GUI window.
+     * Always starts from the bottom left corner of the GUI window. */
+    public void aBunchOfRooms(TETile[][] world){
+        int xCoordinate = 0;
+        int yCoordinate = 0;
+
+        for (int y = yCoordinate; y < HEIGHT; y += 10) {
+            for (int x = xCoordinate; x < WIDTH; x += 10) {
+                RectangularRoom room = randomSizedRoom();
+                Position bottomLeft = new Position(x,y);
+                room.setBottomLeft(bottomLeft);
+                addRectangularRoom(room, world);
+            }
+        }
     }
+
 
     /**
      * Method used for playing a fresh game. The game should start from the main menu.
