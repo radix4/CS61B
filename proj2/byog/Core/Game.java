@@ -53,6 +53,20 @@ public class Game {
         return new int[]{width,height};
     }
 
+    /** Return an array of size two containing random x and y coordinates
+     * between 0 and 9. */
+    public int[] randomXYGenerator(){
+        int lowerBound = 0;
+        int upperBound = 9;
+
+        Random random = new Random();
+
+        int x = RandomUtils.uniform(random, lowerBound,upperBound);
+        int y = RandomUtils.uniform(random, lowerBound,upperBound);
+
+        return new int[]{x,y};
+    }
+
     /** Renders a square into the world demo. */
     public void addSquaredRoom(int xCoordinate, int yCoordinate, int size, TETile[][] world) {
         if (yCoordinate + size >= HEIGHT || xCoordinate + size >= WIDTH){
