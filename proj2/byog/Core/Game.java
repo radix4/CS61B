@@ -15,11 +15,16 @@ public class Game {
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
 
-    private List<Position[]> allPieces ;
-    private Map<Position[], RectangularRoom> allRooms = new HashMap<>();
+    private List<Position[]> allPieces ;    // keeps track of all the borders
+    private Map<RectangularRoom, Position[]> allRooms;      // keeps track of all the room borders
 
     public Game() {
         this.allPieces = new ArrayList<>();
+        this.allRooms = new HashMap<>();
+    }
+
+    public int numberOfRooms(){
+        return allRooms.size();
     }
 
 
@@ -81,10 +86,8 @@ public class Game {
     public void aBunchOfRooms(TETile[][] world){
         for (int y = 0; y < HEIGHT; y += 10) {
             for (int x = 0; x < WIDTH; x += 10) {
-                Position[] piece = new Position[2];
-                piece[0] = new Position(x,y);
-                piece[1] = new Position(x + 10, y + 10);
-                allPieces.add(piece);
+                Position[] pieceCircumference = circumference(new Position(x,y),new Position(x + 10, y + 10));
+                allPieces.add(pieceCircumference);
 
                 RectangularRoom room = randomSizedRoom();
 
@@ -105,14 +108,14 @@ public class Game {
                 if (Logic.isRoomInsideThePiece(topRight,pieceTopRight)) {
                     room.setBottomLeft(bottomLeft);
                     room.setTopRight(topRight);
+
+                    allRooms.put(room, circumference(bottomLeft,topRight));
+
                     addRectangularRoom(room, world);
                 }
             }
         }
     }
-
-
-
 
 
     /**
@@ -138,7 +141,6 @@ public class Game {
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
 
-
         TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
         Game game = new Game();
 
@@ -148,6 +150,7 @@ public class Game {
 
         /* Draws the 2D array world to the screen */
         ter.renderFrame(finalWorldFrame);
+
 
         return finalWorldFrame;
     }
