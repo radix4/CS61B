@@ -10,14 +10,12 @@ public class Logic {
         return (windowWidth * windowHeight) / (pieceWidth * pieceHeight);
     }
 
-    /** room is inside the piece if outlines are less than or equals to. */
+    /** Room is inside the piece if outlines are less than or equals to.
+     * Room is in side if top is less than or equal*/
     public static boolean isRoomInsideThePiece(Position room, Position piece){
-        int roomX = room.getX();
-        int roomY = room.getY();
-        int pieceX = piece.getX();
-        int pieceY = piece.getY();
+        int i = room.compareTo(piece);
 
-        return (pieceX >= roomX) && (pieceY >= roomY);
+        return i < 0;
 
     }
 
@@ -25,6 +23,25 @@ public class Logic {
     public static Position randomCoordinate() {
         int[] coordinates = randomXYGenerator();
         return new Position(coordinates[0],coordinates[1]);
+    }
+
+    /** Return an array of size two containing random width and height of the room. */
+    public static int[] randomHallwayLengthGenerator(){
+        int lowerBound = 3;
+        int upperBound = 10;
+
+        Random random = new Random();
+
+        int width = 3;
+        int length = RandomUtils.uniform(random, lowerBound,upperBound);
+
+        int chance = RandomUtils.uniform(random, 0,9);
+
+        if (chance < 5) {
+            return new int[]{width, length};
+        } else {
+            return new int[]{length, width};
+        }
     }
 
     /** Return an array of size two containing random width and height of the room. */

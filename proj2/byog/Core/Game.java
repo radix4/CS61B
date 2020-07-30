@@ -27,6 +27,10 @@ public class Game {
         return allRooms.size();
     }
 
+    public int numberOfPieces() {
+        return allPieces.size();
+    }
+
 
     /** Creates the dimension of the gui window. */
     public void initializeFrame(){
@@ -50,9 +54,52 @@ public class Game {
         return new RectangularRoom(width,height);
     }
 
+    private RectangularRoom randomSizedHallway() {
+        int[] randomHallway = Logic.randomHallwayLengthGenerator();
+        int width = randomHallway[0];
+        int length = randomHallway[1];
+
+        return new RectangularRoom(width,length);
+    }
+
     /** Circumference of the shapes. */
     private Position[] circumference(Position bottomLeft, Position topRight) {
         return new Position[] {bottomLeft, topRight};
+    }
+
+
+    /** Renders a rectangular room into the world demo. */
+    public void addHallWay(RectangularRoom hallway, TETile[][] world) {
+        int xCoordinate = hallway.getBottomLeft().getX();
+        int yCoordinate = hallway.getBottomLeft().getY();
+        int width = hallway.getWidth();
+        int height = hallway.getHeight();
+
+
+        if (xCoordinate + width >= WIDTH || yCoordinate + height >= HEIGHT ||
+                xCoordinate < 0 || yCoordinate < 0){
+            return;
+        }
+
+        for (int x = xCoordinate; x < xCoordinate + width; x++) {
+            for (int y = yCoordinate; y < yCoordinate + height; y++) {
+                world[x][y] = Tileset.WALL;
+            }
+        }
+
+        if (width == 3) {
+            for (int x = xCoordinate + 1; x < xCoordinate + width - 1; x++) {
+                for (int y = yCoordinate; y < yCoordinate + height; y++) {
+                    world[x][y] = Tileset.FLOOR;
+                }
+            }
+        } else {
+            for (int x = xCoordinate; x < xCoordinate + width; x++) {
+                for (int y = yCoordinate + 1; y < yCoordinate + height - 1; y++) {
+                    world[x][y] = Tileset.FLOOR;
+                }
+            }
+        }
     }
 
 
@@ -90,6 +137,7 @@ public class Game {
                 allPieces.add(pieceCircumference);
 
                 RectangularRoom room = randomSizedRoom();
+                RectangularRoom hallway = randomSizedHallway();
 
                 Position randomCoordinate = Logic.randomCoordinate();
                 randomCoordinate.setX(randomCoordinate.getX() + x); // add x or y to get to the current piece
@@ -100,22 +148,31 @@ public class Game {
                 int width = room.getWidth();
                 int height = room.getHeight();
 
-                Position bottomLeft = new Position(randomX,randomY);
-                Position topRight = new Position(randomX + width, randomY + height);
+                Position roomBottomLeft = new Position(randomX,randomY);
+                Position roomTopRight = new Position(randomX + width, randomY + height);
 
+                Position pieceBottomLeft = new Position(x, y);
                 Position pieceTopRight = new Position(x + 10, y + 10);
 
-                if (Logic.isRoomInsideThePiece(topRight,pieceTopRight)) {
-                    room.setBottomLeft(bottomLeft);
-                    room.setTopRight(topRight);
+                Position hallwayBottomLeft = new Position(x + 1, y + 1);
+                Position hallwayTopRight = new Position(x + 2, y + 2);
 
-                    allRooms.put(room, circumference(bottomLeft,topRight));
+                hallway.setBottomLeft(hallwayBottomLeft);
+                hallway.setTopRight(hallwayTopRight);
+                addHallWay(hallway, world);
 
-                    addRectangularRoom(room, world);
+                if (Logic.isRoomInsideThePiece(roomTopRight,pieceTopRight)) {
+                    room.setBottomLeft(roomBottomLeft);
+                    room.setTopRight(roomTopRight);
+
+                    allRooms.put(room, circumference(roomBottomLeft,roomTopRight));
+
+                    //addRectangularRoom(room, world);
                 }
             }
         }
     }
+
 
 
     /**
@@ -146,7 +203,10 @@ public class Game {
 
         game.initializeFrame(); // creates a gui window with given Width and Height.
         game.initializeTiles(finalWorldFrame);  // renders the gui window with black tiles.
+
+
         game.aBunchOfRooms(finalWorldFrame);
+
 
         /* Draws the 2D array world to the screen */
         ter.renderFrame(finalWorldFrame);
