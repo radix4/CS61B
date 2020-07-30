@@ -81,15 +81,27 @@ public class Logic {
     }
 
     /** Return a random sized hallway without coordinates. */
-    public static RectangularRoom randomNorthHallway() {
+    public static RectangularRoom randomNorthOrSouthHallway() {
         int width = 3;
         int upperBound = 10;
 
         Random random = new Random();
 
-        int length = RandomUtils.uniform(random, 2,upperBound);
+        int length = RandomUtils.uniform(random, 3,upperBound);
 
         return new RectangularRoom(width,length);
+    }
+
+    /** Return a random sized hallway without coordinates. */
+    public static RectangularRoom randomEastOrWestHallway() {
+        int width = 3;
+        int upperBound = 10;
+
+        Random random = new Random();
+
+        int length = RandomUtils.uniform(random, 3,upperBound);
+
+        return new RectangularRoom(length,width);
     }
 
 

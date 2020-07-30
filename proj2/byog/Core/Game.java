@@ -39,12 +39,8 @@ public class Game {
     }
 
 
-    /** Renders a rectangular room into the world demo.
-     * #####            ###
-     * ....#            #.#
-     * #####            #.#
-     * */
-    public void addHallWay(RectangularRoom hallway, TETile[][] world) {
+    /** Renders a rectangular room into the world demo. */
+    public void addHallWay(RectangularRoom hallway, Direction direction, TETile[][] world) {
         int xCoordinate = hallway.getBottomLeft().getX();
         int yCoordinate = hallway.getBottomLeft().getY();
         int width = hallway.getWidth();
@@ -62,13 +58,13 @@ public class Game {
             }
         }
 
-        if (width == 3) {
+        if (direction == Direction.NORTH) {
             for (int x = xCoordinate + 1; x < xCoordinate + width - 1; x++) {
                 for (int y = yCoordinate; y < yCoordinate + height - 1; y++) {
                     world[x][y] = Tileset.FLOOR;
                 }
             }
-        } else {
+        } else if(direction == Direction.EAST) {
             for (int x = xCoordinate; x < xCoordinate + width - 1; x++) {
                 for (int y = yCoordinate + 1; y < yCoordinate + height - 1; y++) {
                     world[x][y] = Tileset.FLOOR;
@@ -85,10 +81,6 @@ public class Game {
         int width = room.getWidth();
         int height = room.getHeight();
 
-
-        if (xCoordinate + width >= WIDTH || yCoordinate + height >= HEIGHT){
-            return;
-        }
 
         for (int x = xCoordinate; x < xCoordinate + width; x++) {
             for (int y = yCoordinate; y < yCoordinate + height; y++) {
@@ -150,10 +142,14 @@ public class Game {
 
             RectangularRoom hallway = new RectangularRoom();
 
-            if(xBorder == room.getTopRight().getX()) {      // if x Border
-                hallway = Logic.randomNorthHallway();
-            } else if (yBorder == room.getTopRight().getY()){
-                hallway = Logic.randomNorthHallway();
+            if(xBorder == room.getTopRight().getX()) {      // x = top right, ---> East
+                hallway = Logic.randomEastOrWestHallway();
+            } else if (yBorder == room.getTopRight().getY()){   // y = top right ----> North
+                hallway = Logic.randomNorthOrSouthHallway();
+            } else if (xBorder == room.getBottomLeft().getX()){     // x = bottom left --> West
+                hallway = Logic.randomEastOrWestHallway();
+            } else if (yBorder == room.getBottomLeft().getY()){     // y = bottom left  ---> South
+                hallway = Logic.randomNorthOrSouthHallway();
             }
 
             int width = hallway.getWidth();
@@ -164,8 +160,15 @@ public class Game {
 
             allHallways.add(hallway);
 
-            addHallWay(hallway, world);
-
+            if(xBorder == room.getTopRight().getX()) {      // East
+                addHallWay(hallway, Direction.EAST, world);
+            } else if (yBorder == room.getTopRight().getY()){   // North
+                addHallWay(hallway, Direction.NORTH, world);
+            } else if (xBorder == room.getBottomLeft().getX()){     // West
+                hallway = Logic.randomEastOrWestHallway();
+            } else if (yBorder == room.getBottomLeft().getY()){     // South
+                hallway = Logic.randomNorthOrSouthHallway();
+            }
         }
 
         System.out.println(allRooms.size());
