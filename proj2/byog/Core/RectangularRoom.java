@@ -6,10 +6,20 @@ public class RectangularRoom {
     private Position bottomLeft;
     private Position topRight;
 
+    public RectangularRoom(){
+        this(0,0,null,null);
+    }
+
 
     public RectangularRoom(int width, int height) {
+        this(width,height,null,null);
+    }
+
+    public RectangularRoom(int width, int height, Position bottomLeft, Position topRight) {
         this.width = width;
         this.height = height;
+        this.bottomLeft = bottomLeft;
+        this.topRight = topRight;
     }
 
     public Position getBottomLeft() {
