@@ -72,6 +72,36 @@ public class Logic {
         }
     }
 
+    /** Returns an array of size 2 containing random x,y border coordinates. */
+    public static int[] randomHallwayBorderCoordinates(RectangularRoom room){
+        Position bottomLeft = room.getBottomLeft();
+        Position topRight = room.getTopRight();
+
+        int bottomLeftX = bottomLeft.getX();
+        int bottomLeftY = bottomLeft.getY();
+        int topRightX = topRight.getX();
+        int topRightY = topRight.getY();
+
+        Random random = new Random();
+
+        int chance = RandomUtils.uniform(random, 0,99);
+
+        // if chance < 25, x stays, y changes
+        if (chance < 25) {
+            int newY = RandomUtils.uniform(random, bottomLeftY,topRightY - 2);
+            return new int[] {topRightX, newY};
+        } else if (chance < 50){    // x changes, y stays
+            int newX = RandomUtils.uniform(random, bottomLeftX,topRightX - 2);
+            return new int[]{newX, topRightY};
+        } else if (chance < 75){    // WEST
+            int newY = RandomUtils.uniform(random, bottomLeftY,topRightY - 2);
+            return new int[] {bottomLeftX, newY};
+        } else {        // x changes, y stays
+            int newX = RandomUtils.uniform(random, bottomLeftX,topRightX - 2);
+            return new int[] {newX, bottomLeftY};
+        }
+    }
+
     /** Return a random sized room without coordinates. */
     public static RectangularRoom randomSizedRoom() {
         int[] randomWidthHeight = Logic.randomWidthAndHeightGenerator();
@@ -95,7 +125,7 @@ public class Logic {
 
         int length = RandomUtils.uniform(random, 3,upperBound);
 
-        return new RectangularRoom(width,length);
+        return new RectangularRoom(3,length);
     }
 
     /** Return a random sized hallway without coordinates. */
@@ -107,7 +137,7 @@ public class Logic {
 
         int length = RandomUtils.uniform(random, 3,upperBound);
 
-        return new RectangularRoom(length,width);
+        return new RectangularRoom(length,3);
     }
 
 
