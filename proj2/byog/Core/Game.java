@@ -41,36 +41,76 @@ public class Game {
 
     /** Renders a rectangular room into the world demo. */
     public void addHallWay(RectangularRoom hallway, Direction direction, TETile[][] world) {
-        int xCoordinate = hallway.getBottomLeft().getX();
-        int yCoordinate = hallway.getBottomLeft().getY();
+        int xBottom = hallway.getBottomLeft().getX();
+        int yBottom = hallway.getBottomLeft().getY();
+
+        int xTop = hallway.getTopRight().getX();
+        int yTop = hallway.getTopRight().getY();
+
         int width = hallway.getWidth();
         int height = hallway.getHeight();
 
 
-        if (xCoordinate + width >= WIDTH || yCoordinate + height >= HEIGHT ||
-                xCoordinate < 0 || yCoordinate < 0){
+        if (xBottom + width > WIDTH || yBottom + height > HEIGHT ||
+                xBottom - width < 0 || yBottom - height < 0){
             return;
         }
 
-        for (int x = xCoordinate; x < xCoordinate + width; x++) {
-            for (int y = yCoordinate; y < yCoordinate + height; y++) {
-                world[x][y] = Tileset.WALL;
+        // renders a rectangle with walls
+
+        if (direction == Direction.NORTH) {
+            for (int x = xBottom; x < xBottom + width; x++) {
+                for (int y = yBottom; y < yBottom + height; y++) {
+                    world[x][y] = Tileset.WALL;
+                }
+            }
+
+            for (int x = xBottom + 1; x < xBottom + width - 1; x++) {
+                for (int y = yBottom; y < yBottom + height - 1; y++) {
+                    world[x][y] = Tileset.FLOOR;
+                }
+            }
+        } else if (direction == Direction.EAST){
+            for (int x = xBottom; x < xBottom + width; x++) {
+                for (int y = yBottom; y < yBottom + height; y++) {
+                    world[x][y] = Tileset.WALL;
+                }
+            }
+
+            for (int x = xBottom; x < xBottom + width - 1; x++) {
+                for (int y = yBottom + 1; y < yBottom + height - 1; y++) {
+                    world[x][y] = Tileset.FLOOR;
+                }
+            }
+        }else if (direction == Direction.SOUTH){
+            for (int x = xBottom; x < xBottom + width; x++) {
+                for (int y = yBottom; y > yBottom - height - 1; y--) {
+                    world[x][y] = Tileset.WALL;
+                }
+            }
+
+            for (int x = xBottom; x > xBottom - width; x--) {
+                for (int y = yBottom - 1; y > yBottom - height + 2; y--) {
+                    world[x][y] = Tileset.FLOOR;
+                }
+            }
+
+        }else if (direction == Direction.WEST){
+            for (int x = xBottom; x > xTop; x--) {
+                for (int y = yBottom + 3; y > yTop + 4; y--) {
+                    world[x][y] = Tileset.WALL;
+                }
+            }
+
+            for (int x = xBottom; x > xTop; x--) {
+                for (int y = yBottom + 2; y > yTop + 4; y--) {
+                    world[x][y] = Tileset.FLOOR;
+                }
             }
         }
 
-        if (direction == Direction.NORTH) {
-            for (int x = xCoordinate + 1; x < xCoordinate + width - 1; x++) {
-                for (int y = yCoordinate; y < yCoordinate + height - 1; y++) {
-                    world[x][y] = Tileset.FLOOR;
-                }
-            }
-        } else if(direction == Direction.EAST) {
-            for (int x = xCoordinate; x < xCoordinate + width - 1; x++) {
-                for (int y = yCoordinate + 1; y < yCoordinate + height - 1; y++) {
-                    world[x][y] = Tileset.FLOOR;
-                }
-            }
-        }
+
+        allHallways.add(hallway);
     }
 
 
@@ -140,6 +180,9 @@ public class Game {
             int xBorder = position[0];
             int yBorder = position[1];
 
+            int width;
+            int height;
+
             RectangularRoom hallway = new RectangularRoom();
 
             if(xBorder == room.getTopRight().getX()) {      // x = top right, ---> East
@@ -152,22 +195,33 @@ public class Game {
                 hallway = Logic.randomNorthOrSouthHallway();
             }
 
-            int width = hallway.getWidth();
-            int height = hallway.getHeight();
+            if (xBorder == room.getTopRight().getX() || yBorder == room.getTopRight().getY()) {
+                width = hallway.getWidth();
+                height = hallway.getHeight();
+                hallway.setBottomLeft(new Position(xBorder, yBorder));
+                hallway.setTopRight(new Position(xBorder + width - 1, yBorder + height - 1));
+            } else if (xBorder == room.getBottomLeft().getX()){     // West
+                width = hallway.getWidth();
+                height = hallway.getHeight();
+                hallway.setBottomLeft(new Position(xBorder, yBorder));
+                hallway.setTopRight(new Position(xBorder - width - 1, yBorder - height - 1));
+            } else if (yBorder == room.getBottomLeft().getY()) {    // South
+                width = hallway.getWidth();
+                height = hallway.getHeight();
+                hallway.setBottomLeft(new Position(xBorder, yBorder));
+                hallway.setTopRight(new Position(xBorder - width - 1, yBorder - height - 1));
+            }
 
-            hallway.setBottomLeft(new Position(xBorder, yBorder));
-            hallway.setTopRight(new Position(xBorder + width - 1, yBorder + height - 1));
 
-            allHallways.add(hallway);
 
-            if(xBorder == room.getTopRight().getX()) {      // East
+            if(xBorder == room.getTopRight().getX()) {      // North
                 addHallWay(hallway, Direction.EAST, world);
             } else if (yBorder == room.getTopRight().getY()){   // North
                 addHallWay(hallway, Direction.NORTH, world);
             } else if (xBorder == room.getBottomLeft().getX()){     // West
-                hallway = Logic.randomEastOrWestHallway();
+                addHallWay(hallway, Direction.WEST, world);
             } else if (yBorder == room.getBottomLeft().getY()){     // South
-                hallway = Logic.randomNorthOrSouthHallway();
+                addHallWay(hallway, Direction.SOUTH, world);
             }
         }
 

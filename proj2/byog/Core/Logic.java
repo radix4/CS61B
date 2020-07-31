@@ -56,13 +56,19 @@ public class Logic {
 
         int chance = RandomUtils.uniform(random, 0,99);
 
-        // if chance < 50, x stays, y changes
-        if (chance < 50) {
+        // if chance < 25, x stays, y changes
+        if (chance < 25) {
             int newY = RandomUtils.uniform(random, bottomLeftY,topRightY - 2);
             return new int[] {topRightX, newY};
-        } else {
+        } else if (chance < 50){    // x changes, y stays
             int newX = RandomUtils.uniform(random, bottomLeftX,topRightX - 2);
             return new int[]{newX, topRightY};
+        } else if (chance < 75){    // WEST
+            int newY = RandomUtils.uniform(random, bottomLeftY,topRightY - 2);
+            return new int[] {bottomLeftX, newY};
+        } else {        // x changes, y stays
+            int newX = RandomUtils.uniform(random, bottomLeftX,topRightX - 2);
+            return new int[] {newX, bottomLeftY};
         }
     }
 
