@@ -5,7 +5,9 @@ import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WorldGenerator {
     TERenderer ter = new TERenderer();
@@ -13,9 +15,10 @@ public class WorldGenerator {
     public static final int WIDTH = 70;
     public static final int HEIGHT = 50;
 
-    private List<RectangularRoom> allPieces = new ArrayList<>();    // keeps track of all the borders
-    private List<RectangularRoom> allRooms = new ArrayList<>();      // keeps track of all the rooms
-    private List<RectangularRoom> allHallways = new ArrayList<>();      // keeps track of all the hallways
+    private List<Rectangular> allPieces = new ArrayList<>();    // keeps track of all the borders
+    private List<Rectangular> allRooms = new ArrayList<>();      // keeps track of all the rooms
+    private List<Rectangular> allHallways = new ArrayList<>();      // keeps track of all the hallways
+    private Map<Rectangular, Rectangular> roomsAndHallways = new HashMap<>();
 
     /** Creates the dimension of the gui window. */
     public void initializeFrame(){
@@ -30,23 +33,38 @@ public class WorldGenerator {
         }
     }
 
-    public static boolean isHallwayAppropriate(RectangularRoom hallway){
-        int xBottom = hallway.getBottomLeft().getX();
-        int yBottom = hallway.getBottomLeft().getY();
+    public boolean isInitialHallwaysAppropriate(Rectangular hallway, Direction direction){
+        for (Rectangular room : allRooms) {
 
-        int xTop = hallway.getTopRight().getX();
-        int yTop = hallway.getTopRight().getY();
+            // Hallways
+            int xBottom = hallway.getBottomLeft().getX();
+            int yBottom = hallway.getBottomLeft().getY();
+            int xTop = hallway.getTopRight().getX();
+            int yTop = hallway.getTopRight().getY();
 
-        int width = hallway.getWidth();
-        int height = hallway.getHeight();
+            // Rooms
+            int xRoomBottom = room.getBottomLeft().getX();
+            int yRoomBottom = room.getBottomLeft().getY();
+            int xRoomTop = room.getTopRight().getX();
+            int yRoomTop = room.getTopRight().getY();
 
 
-        return !(xBottom + width > WIDTH || yBottom + height > HEIGHT ||
-                xBottom - width < 0 || yBottom - height < 0);
+            int width = hallway.getWidth();
+            int height = hallway.getHeight();
+
+            if (xBottom + width > WIDTH || yBottom + height > HEIGHT ||
+                    xBottom - width < 0 || yBottom - height < 0) {
+                return false;
+            }
+
+        }
+
+
+        return true;
     }
 
     /** Renders a rectangular room into the world demo. */
-    public void drawAHallWay(RectangularRoom hallway, Direction direction, TETile[][] world) {
+    public void drawHallWay(Rectangular hallway, Direction direction, TETile[][] world) {
         int xBottom;
         int yBottom;
 
@@ -59,7 +77,7 @@ public class WorldGenerator {
 
             for (int x = xBottom; x < xBottom + width; x++) {
                 for (int y = yBottom; y < yBottom + height; y++) {
-                    world[x][y] = Tileset.SAND;
+                    world[x][y] = Tileset.WALL;
                 }
             }
 
@@ -76,7 +94,7 @@ public class WorldGenerator {
 
             for (int x = xBottom; x < xBottom + width; x++) {
                 for (int y = yBottom; y < yBottom + height; y++) {
-                    world[x][y] = Tileset.SAND;
+                    world[x][y] = Tileset.WALL;
                 }
             }
 
@@ -91,7 +109,7 @@ public class WorldGenerator {
 
             for (int x = xBottom; x < xBottom + width; x++) {
                 for (int y = yBottom; y < yBottom + height; y++) {
-                    world[x][y] = Tileset.SAND;
+                    world[x][y] = Tileset.WALL;
                 }
             }
 
@@ -107,7 +125,7 @@ public class WorldGenerator {
 
             for (int x = xBottom; x < xBottom + width; x++) {
                 for (int y = yBottom; y < yBottom + height; y++) {
-                    world[x][y] = Tileset.SAND;
+                    world[x][y] = Tileset.WALL;
                 }
             }
 
@@ -124,7 +142,7 @@ public class WorldGenerator {
     }
 
     /** Renders a rectangular room into the world demo. */
-    public void addRectangularRoom(RectangularRoom room, TETile[][] world) {
+    public void addRoom(Rectangular room, TETile[][] world) {
         int xCoordinate = room.getBottomLeft().getX();
         int yCoordinate = room.getBottomLeft().getY();
         int width = room.getWidth();
@@ -149,7 +167,7 @@ public class WorldGenerator {
     public void aBunchOfRooms(TETile[][] world){
         for (int y = 0; y < HEIGHT; y += 10) {
             for (int x = 0; x < WIDTH; x += 10) {
-                RectangularRoom room = Logic.randomSizedRoom();
+                Rectangular room = Logic.randomSizedRoom();
 
                 Position randomCoordinate = Logic.randomCoordinate();
                 randomCoordinate.setX(randomCoordinate.getX() + x); // add x or y to get to the current piece
@@ -166,7 +184,7 @@ public class WorldGenerator {
                 Position pieceBottomLeft = new Position(x, y);
                 Position pieceTopRight = new Position(x + 9, y + 9);
 
-                RectangularRoom piece = new RectangularRoom(10,10,pieceBottomLeft,pieceTopRight);
+                Rectangular piece = new Rectangular(10,10,pieceBottomLeft,pieceTopRight);
                 allPieces.add(piece);
 
                 room.setBottomLeft(roomBottomLeft);
@@ -175,7 +193,7 @@ public class WorldGenerator {
                 if (Logic.isRoomInsideThePiece(room, piece)) {
                     allRooms.add(room);
 
-                    addRectangularRoom(room, world);
+                    addRoom(room, world);
                 }
             }
         }
@@ -184,11 +202,11 @@ public class WorldGenerator {
     /** Randomly renders a bunch of hallways across the GUI window.
      * Always starts from the bottom left corner (0,0) of the GUI window. */
     public void aBunchOfHallways(TETile[][] world) {
-        for (RectangularRoom room : allRooms) {
-
-            RectangularRoom hallway = new RectangularRoom();
+        for (Rectangular room : allRooms) {
+            Rectangular hallway = new Rectangular();
             int xBorder;
             int yBorder;
+            Direction direction = null;
 
             while (true) {
                 int[] position = Logic.randomBorderCoordinates(room);
@@ -200,12 +218,16 @@ public class WorldGenerator {
 
                 if (xBorder == room.getTopRight().getX()) {      // x = top right, ---> East
                     hallway = Logic.randomEastOrWestHallway();
+                    direction = Direction.EAST;
                 } else if (yBorder == room.getTopRight().getY()) {   // y = top right ----> North
                     hallway = Logic.randomNorthOrSouthHallway();
+                    direction = Direction.NORTH;
                 } else if (xBorder == room.getBottomLeft().getX()) {     // x = bottom left --> West
                     hallway = Logic.randomEastOrWestHallway();
+                    direction = Direction.WEST;
                 } else if (yBorder == room.getBottomLeft().getY()) {     // y = bottom left  ---> South
                     hallway = Logic.randomNorthOrSouthHallway();
+                    direction = Direction.SOUTH;
                 }
 
                 // North, East
@@ -227,84 +249,29 @@ public class WorldGenerator {
                             hallway.getBottomLeft().getY() + height - 1));
                 }
 
-                if (isHallwayAppropriate(hallway)){
+                if (isInitialHallwaysAppropriate(hallway, direction)) {
                     break;
                 }
 
             }
 
             if (xBorder == room.getTopRight().getX()) {      // North
-                drawAHallWay(hallway, Direction.EAST, world);
+                drawHallWay(hallway, Direction.EAST, world);
             } else if (yBorder == room.getTopRight().getY()) {   // North
-                drawAHallWay(hallway, Direction.NORTH, world);
+                drawHallWay(hallway, Direction.NORTH, world);
             } else if (xBorder == room.getBottomLeft().getX()) {     // West
-                drawAHallWay(hallway, Direction.WEST, world);
+                drawHallWay(hallway, Direction.WEST, world);
             } else if (yBorder == room.getBottomLeft().getY()) {     // South
-                drawAHallWay(hallway, Direction.SOUTH, world);
+                drawHallWay(hallway, Direction.SOUTH, world);
             }
+
         }
 
     }
 
     public void hallwaysStickingOutOfOtherHallways(TETile[][] world){
-        for (RectangularRoom hall : allHallways) {
-
-            RectangularRoom hallway;
-            int xBorder;
-            int yBorder;
-
-            while (true) {
-                int[] position = Logic.randomBorderCoordinates(hall);
-                xBorder = position[0];
-                yBorder = position[1];
-
-                int width;
-                int height;
-
-                hallway = new RectangularRoom();
-
-                if (xBorder == hall.getTopRight().getX()) {      // x = top right, ---> East
-                    hallway = Logic.randomEastOrWestHallway();
-                } else if (yBorder == hall.getTopRight().getY()) {   // y = top right ----> North
-                    hallway = Logic.randomNorthOrSouthHallway();
-                } else if (xBorder == hall.getBottomLeft().getX()) {     // x = bottom left --> West
-                    hallway = Logic.randomEastOrWestHallway();
-                } else if (yBorder == hall.getBottomLeft().getY()) {     // y = bottom left  ---> South
-                    hallway = Logic.randomNorthOrSouthHallway();
-                }
-
-                if (xBorder == hall.getTopRight().getX() || yBorder == hall.getTopRight().getY()) {
-                    width = hallway.getWidth();
-                    height = hallway.getHeight();
-                    hallway.setBottomLeft(new Position(xBorder, yBorder));
-                    hallway.setTopRight(new Position(xBorder + width - 1, yBorder + height - 1));
-                } else if (xBorder == hall.getBottomLeft().getX()) {     // West
-                    width = hallway.getWidth();
-                    height = hallway.getHeight();
-                    hallway.setBottomLeft(new Position(xBorder, yBorder));
-                    hallway.setTopRight(new Position(xBorder - width - 1, yBorder - height - 1));
-                } else if (yBorder == hall.getBottomLeft().getY()) {    // South
-                    width = hallway.getWidth();
-                    height = hallway.getHeight();
-                    hallway.setBottomLeft(new Position(xBorder, yBorder));
-                    hallway.setTopRight(new Position(xBorder - width - 1, yBorder - height - 1));
-                }
-
-                if (isHallwayAppropriate(hallway)){
-                    break;
-                }
-
-            }
-
-            if (xBorder == hall.getTopRight().getX()) {      // North
-                drawAHallWay(hallway, Direction.EAST, world);
-            } else if (yBorder == hall.getTopRight().getY()) {   // North
-                drawAHallWay(hallway, Direction.NORTH, world);
-            } else if (xBorder == hall.getBottomLeft().getX()) {     // West
-                drawAHallWay(hallway, Direction.WEST, world);
-            } else if (yBorder == hall.getBottomLeft().getY()) {     // South
-                drawAHallWay(hallway, Direction.SOUTH, world);
-            }
+        for (Rectangular hall : allHallways) {
+            System.out.println("yee yee");
         }
     }
 

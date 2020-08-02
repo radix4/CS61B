@@ -12,7 +12,7 @@ public class Logic {
 
     /** Room is inside the piece if outlines are less than or equals to.
      * Room is in side if top is less than or equal*/
-    public static boolean isRoomInsideThePiece(RectangularRoom room, RectangularRoom piece){
+    public static boolean isRoomInsideThePiece(Rectangular room, Rectangular piece){
         Position roomBottomLeft = room.getBottomLeft();
         Position roomTopRight = room.getTopRight();
         Position pieceBottomLeft = piece.getBottomLeft();
@@ -43,7 +43,7 @@ public class Logic {
     }
 
     /** Returns an array of size 2 containing random x,y border coordinates. */
-    public static int[] randomBorderCoordinates(RectangularRoom room){
+    public static int[] randomBorderCoordinates(Rectangular room){
         Position bottomLeft = room.getBottomLeft();
         Position topRight = room.getTopRight();
 
@@ -73,9 +73,9 @@ public class Logic {
     }
 
     /** Returns an array of size 2 containing random x,y border coordinates. */
-    public static int[] randomHallwayBorderCoordinates(RectangularRoom room){
-        Position bottomLeft = room.getBottomLeft();
-        Position topRight = room.getTopRight();
+    public static int[] randomNorthHallwayBorderCoordinates(Rectangular hallway){
+        Position bottomLeft = hallway.getBottomLeft();
+        Position topRight = hallway.getTopRight();
 
         int bottomLeftX = bottomLeft.getX();
         int bottomLeftY = bottomLeft.getY();
@@ -103,11 +103,11 @@ public class Logic {
     }
 
     /** Return a random sized room without coordinates. */
-    public static RectangularRoom randomSizedRoom() {
+    public static Rectangular randomSizedRoom() {
         int[] randomWidthHeight = Logic.randomWidthAndHeightGenerator();
         int width = randomWidthHeight[0];
         int height = randomWidthHeight[1];
-        return new RectangularRoom(width,height);
+        return new Rectangular(width,height);
     }
 
 
@@ -117,7 +117,7 @@ public class Logic {
     }
 
     /** Return a random sized hallway without coordinates. */
-    public static RectangularRoom randomNorthOrSouthHallway() {
+    public static Rectangular randomNorthOrSouthHallway() {
         int width = 3;
         int upperBound = 10;
 
@@ -125,11 +125,11 @@ public class Logic {
 
         int length = RandomUtils.uniform(random, 3,upperBound);
 
-        return new RectangularRoom(3,length);
+        return new Rectangular(3,length);
     }
 
     /** Return a random sized hallway without coordinates. */
-    public static RectangularRoom randomEastOrWestHallway() {
+    public static Rectangular randomEastOrWestHallway() {
         int width = 3;
         int upperBound = 10;
 
@@ -137,7 +137,7 @@ public class Logic {
 
         int length = RandomUtils.uniform(random, 3,upperBound);
 
-        return new RectangularRoom(length,3);
+        return new Rectangular(length,3);
     }
 
 
