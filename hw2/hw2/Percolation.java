@@ -1,8 +1,9 @@
 package hw2;
 
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
-import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * This program simulates the probability of percolation using the disjoint set
@@ -13,18 +14,25 @@ import static org.junit.Assert.*;
 public class Percolation {
     private int N;
     private int numberOfOpenSites;
-    private WeightedQuickUnionUF percolation;
+    private WeightedQuickUnionUF percolation;   // only takes in integer
+    private int[][] twoDGrid;
+    private Map<Integer, Boolean> sites;
+    private int topSite;
+    private int bottomSite;
 
     /** create N-by-N grid, with all sites initially blocked */
     public Percolation(int N) {
-        if (N < 0) {
+        if (N <= 0) {
             throw new IllegalArgumentException();
         }
 
         this.N = N;
         this.numberOfOpenSites = 0;
-        this.percolation = new WeightedQuickUnionUF(10); // n = number of elements
-
+        this.percolation = new WeightedQuickUnionUF(N * N + 2); // n = number of elements
+        this.twoDGrid = twoDGrid();
+        this.sites = initialSites();
+        this.topSite = 0;
+        this.bottomSite = N * N + 1;
     }
 
 
@@ -32,38 +40,91 @@ public class Percolation {
     public void open(int row, int col) {
         isInRange(row,col);
 
+        if (isOpen(row,col)) {
+            return;
+        }
 
+        int site = xyTo1D(row,col);
+        sites.put(site,true);
+
+
+
+        numberOfOpenSites++;
     }
 
     /** is the site (row, col) open? */
     public boolean isOpen(int row, int col) {
         isInRange(row,col);
+        int site = xyTo1D(row,col);
 
-        return false;
+        return sites.get(site);
     }
 
-    // is the site (row, col) full?
+    /** is the site (row, col) full? */
     public boolean isFull(int row, int col) {
         isInRange(row,col);
+        int site = xyTo1D(row, col);
+
+        if (isOpen(row, col)) {
+            if (site <= N) {
+                percolation.union(topSite, site);
+                return true;
+            }
+        }
 
         return false;
     }
 
-    // number of open sites
+    /** return number of open sites
+     * @return int */
     public int numberOfOpenSites() {
         return numberOfOpenSites;
     }
 
-    // does the system percolate?
+    /** Whether percolates or not.
+     * @return boolean */
     public boolean percolates(){
         return false;
     }
 
-    /** Helper method that returns the site number from a two dimensional coordinate. */
+    /** All sites are blocked initially. */
+    private Map<Integer, Boolean> initialSites(){
+        Map<Integer, Boolean> sites = new TreeMap<>();
+        for (int y = 0; y < twoDGrid.length; y++){
+            for (int x = 0; x < twoDGrid[y].length; x++){
+                int site = xyTo1D(y,x);
+                sites.put(site, false);
+            }
+        }
+
+        return sites;
+    }
+
+    /** Helper method that returns the site number from a two dimensional coordinate.
+     * (0,0) --> 1
+     * (0,1) --> 2
+     * (1,0) --> 6
+     * Assuming N = 5 ( 5x5 grid )
+     * This method should be made private, public for testing purposes.
+     * */
     public int xyTo1D(int row, int col) {
         isInRange(row,col);
+        return twoDGrid[row][col];
+    }
 
-        return 0;
+    /** Translate the 2D grid into a 2D array. */
+    private int[][] twoDGrid(){
+        int[][] twoDArray = new int[N][N];
+        int siteNumber = 1;
+
+        for (int y = 0; y < N; y++){
+            for (int x = 0; x < N; x++){
+                twoDArray[y][x] = siteNumber;
+                siteNumber++;
+            }
+        }
+
+        return twoDArray;
     }
 
     /** Helper method, throws exception if parameters 'row' or 'col' exceeds the
@@ -79,7 +140,6 @@ public class Percolation {
 
         return true;
     }
-
 
 
     // use for unit testing (not required)
