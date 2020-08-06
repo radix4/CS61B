@@ -33,6 +33,8 @@ public class Percolation {
         this.sites = initialSites();
         this.topSite = 0;
         this.bottomSite = N * N + 1;
+
+        initialUnion();
     }
 
 
@@ -45,10 +47,10 @@ public class Percolation {
         }
 
         int site = xyTo1D(row,col);
+
         sites.put(site,true);
 
-
-
+        checkForConnectivity(site);
         numberOfOpenSites++;
     }
 
@@ -60,19 +62,24 @@ public class Percolation {
         return sites.get(site);
     }
 
+    public boolean isOpen(int site){
+        if (site <= 0 || site > N) {
+            return false;
+        }
+
+        return sites.get(site);
+    }
+
+
     /** is the site (row, col) full? */
     public boolean isFull(int row, int col) {
         isInRange(row,col);
         int site = xyTo1D(row, col);
-
-        if (isOpen(row, col)) {
-            if (site <= N) {
-                percolation.union(topSite, site);
-                return true;
-            }
+        if (!isOpen(site)){
+            return false;
         }
 
-        return false;
+        return percolation.connected(topSite,site);
     }
 
     /** return number of open sites
@@ -85,6 +92,37 @@ public class Percolation {
      * @return boolean */
     public boolean percolates(){
         return false;
+    }
+
+    private void initialUnion(){
+        for (int i = 1; i <= N; i++) {
+            percolation.union(topSite, i);
+        }
+    }
+
+    /** Whether two sites connected together. */
+    private void checkForConnectivity(int recentlyOpenedSite){
+        int top = recentlyOpenedSite - N;
+        int left = recentlyOpenedSite - 1;
+        int right = recentlyOpenedSite + 1;
+        int bottom = recentlyOpenedSite + N;
+
+        if (isOpen(top)) {
+            percolation.union(top, recentlyOpenedSite);
+        }
+
+        if (isOpen(left)) {
+            percolation.union(left,recentlyOpenedSite);
+        }
+
+        if (isOpen(right)) {
+            percolation.union(right, recentlyOpenedSite);
+        }
+
+        if (isOpen(bottom)) {
+            percolation.union(bottom, recentlyOpenedSite);
+        }
+
     }
 
     /** All sites are blocked initially. */
@@ -144,6 +182,10 @@ public class Percolation {
 
     // use for unit testing (not required)
     public static void main(String[] args)  {
-
+        Percolation p = new Percolation(5);
+        p.percolation.union(1,5);
+        p.percolation.union(2,6);
+        p.percolation.union(1,2);
+        System.out.println(p.percolation.count());
     }
 }
