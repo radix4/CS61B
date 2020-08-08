@@ -68,10 +68,18 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         if (!buckets[i].containsKey(key))   size++;
         buckets[i].put(key,value);
 
+        if (loadFactor() > MAX_LF) {
+            resize(buckets.length * 2);
+        }
     }
 
-    private void resize(){
+    private void resize(int capacity){
+        ArrayMap<K,V>[] temp = new ArrayMap[capacity];
+        for (int i = 0; i < buckets.length; i++){
+            temp[i] = buckets[i];
+        }
 
+        buckets = temp;
     }
 
     /* Returns the number of key-value mappings in this map. */
