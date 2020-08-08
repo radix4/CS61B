@@ -7,7 +7,7 @@ import java.util.Set;
  *  A hash table-backed Map implementation. Provides amortized constant time
  *  access to elements via get(), remove(), and put() in the best case.
  *
- *  @author Your name here
+ *  @author Thang Cao
  */
 public class MyHashMap<K, V> implements Map61B<K, V> {
 
@@ -17,6 +17,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     private ArrayMap<K, V>[] buckets;
     private int size;
 
+    /** LF = N/M */
     private int loadFactor() {
         return size / buckets.length;
     }
@@ -38,6 +39,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     /** Computes the hash function of the given key. Consists of
      *  computing the hashcode, followed by modding by the number of buckets.
      *  To handle negative numbers properly, uses floorMod instead of %.
+     *  As long as numBuckets (the right side) is positive, the result will be positive.
      */
     private int hash(K key) {
         if (key == null) {
@@ -48,15 +50,17 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         return Math.floorMod(key.hashCode(), numBuckets);
     }
 
-    /* Returns the value to which the specified key is mapped, or null if this
+    /**
+     * Returns the value to which the specified key is mapped, or null if this
      * map contains no mapping for the key.
      */
     @Override
     public V get(K key) {
-        throw new UnsupportedOperationException();
+        int i = hash(key);
+        return buckets[i].get(key);
     }
 
-    /* Associates the specified value with the specified key in this map. */
+    /** Associates the specified value with the specified key in this map. */
     @Override
     public void put(K key, V value) {
         throw new UnsupportedOperationException();
