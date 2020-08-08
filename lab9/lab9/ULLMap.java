@@ -71,7 +71,14 @@ public class ULLMap<K, V>  implements Map61B<K, V> {
     /** Represents one node in the linked list that stores the key-value pairs
      *  in the dictionary. */
     private class Entry {
-        
+        /** Stores the key of the key-value pair of this node in the list. */
+        K key;
+        /** Stores the value of the key-value pair of this node in the list. */
+        V val;
+        /** Stores the next Entry in the linked list. */
+        Entry next;
+
+
         /** Stores KEY as the key in this key-value pair, VAL as the value, and
          *  NEXT as the next node in the linked list. */
         Entry(K k, V v, Entry n) {
@@ -91,18 +98,13 @@ public class ULLMap<K, V>  implements Map61B<K, V> {
             }
             return next.get(k);
         }
-
-        /** Stores the key of the key-value pair of this node in the list. */
-        K key;
-        /** Stores the value of the key-value pair of this node in the list. */
-        V val;
-        /** Stores the next Entry in the linked list. */
-        Entry next;
         
     }
 
     /** An iterator that iterates over the keys of the dictionary. */
     private class ULLMapIter implements Iterator<K> {
+        /** Stores the current key-value pair. */
+        private Entry cur;
 
         /** Create a new ULLMapIter by setting cur to the first node in the
          *  linked list that stores the key-value pairs. */
@@ -112,7 +114,7 @@ public class ULLMap<K, V>  implements Map61B<K, V> {
 
         @Override
         public boolean hasNext() {
-            return cur != null;
+            return (cur != null);
         }
        
         @Override
@@ -121,10 +123,6 @@ public class ULLMap<K, V>  implements Map61B<K, V> {
             cur = cur.next;
             return ret;
         }
-
-
-        /** Stores the current key-value pair. */
-        private Entry cur;
     
     }
 

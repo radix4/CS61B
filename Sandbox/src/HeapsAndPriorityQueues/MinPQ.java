@@ -2,7 +2,7 @@ package HeapsAndPriorityQueues;
 
 /** (Min) Priority Queue: Allowing tracking and removal of
  * the smallest item in a priority queue. */
-public interface PriorityQueueInterface<Item> {
+public interface MinPQ<Item> {
     /** Adds the item to the priority queue. */
     public void add(Item x);
     /** Returns the smallest item in the priority queue. */

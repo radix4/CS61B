@@ -6,7 +6,7 @@ import java.util.Set;
 /**
  * Implementation of interface Map61B with BST as core data structure.
  *
- * @author Your name here
+ * @author Thang Cao
  */
 public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
