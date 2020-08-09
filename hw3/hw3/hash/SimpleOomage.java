@@ -3,6 +3,11 @@ import java.awt.Color;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdDraw;
 
+/**
+ *  Override the equals() and hashCode() methods.
+ *
+ *  @author Thang Cao
+ */
 
 public class SimpleOomage implements Oomage {
     protected int red;
@@ -13,15 +18,18 @@ public class SimpleOomage implements Oomage {
     private static final boolean USE_PERFECT_HASH = false;
 
     @Override
-    public boolean equals(Object o) {
-        // TODO: Write this method.
-        return false;
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null) return false;
+        if (this.getClass() != other.getClass()) return false;
+
+        SimpleOomage that = (SimpleOomage) other;
+
+        return (this.red == that.red) && (this.green == that.green) && (this.blue == that.blue);
     }
 
-    /* Uncomment this method after you've written
-       equals and failed the testHashCodeAndEqualsConsistency
-       test.
-    @Override
+
+    /*@Override
     public int hashCode() {
         if (!USE_PERFECT_HASH) {
             return red + green + blue;
@@ -62,6 +70,7 @@ public class SimpleOomage implements Oomage {
         randomSimpleOomage().draw(0.75, 0.75, 1);
         randomSimpleOomage().draw(0.25, 0.75, 1);
         randomSimpleOomage().draw(0.75, 0.25, 1);
+
     }
 
     public String toString() {
