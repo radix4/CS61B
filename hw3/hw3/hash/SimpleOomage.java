@@ -15,7 +15,7 @@ public class SimpleOomage implements Oomage {
     protected int blue;
 
     private static final double WIDTH = 0.01;
-    private static final boolean USE_PERFECT_HASH = false;
+    private static final boolean USE_PERFECT_HASH = true;
 
     @Override
     public boolean equals(Object other) {
@@ -29,15 +29,21 @@ public class SimpleOomage implements Oomage {
     }
 
 
-    /*@Override
+    @Override
     public int hashCode() {
         if (!USE_PERFECT_HASH) {
             return red + green + blue;
         } else {
-            // TODO: Write a perfect hash function for Simple Oomages.
-            return 0;
+            int hash = 17;
+            hash += red / 5;
+            hash *= 257;
+            hash += green / 5;
+            hash *= 257;
+            hash += blue / 5;
+            hash *= 257;
+            return hash;
         }
-    }*/
+    }
 
     public SimpleOomage(int r, int g, int b) {
         if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
@@ -70,6 +76,7 @@ public class SimpleOomage implements Oomage {
         randomSimpleOomage().draw(0.75, 0.75, 1);
         randomSimpleOomage().draw(0.25, 0.75, 1);
         randomSimpleOomage().draw(0.75, 0.25, 1);
+        System.out.println(0/5);
 
     }
 
