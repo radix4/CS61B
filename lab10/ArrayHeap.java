@@ -8,6 +8,31 @@ import static org.junit.Assert.*;
  * will be useful later on in the class...
  */
 public class ArrayHeap<T> implements ExtrinsicPQ<T> {
+
+    private class Node {
+        private T myItem;
+        private double myPriority;
+
+        private Node(T item, double priority) {
+            myItem = item;
+            myPriority = priority;
+        }
+
+        public T item(){
+            return myItem;
+        }
+
+        public double priority() {
+            return myPriority;
+        }
+
+        @Override
+        public String toString() {
+            return myItem.toString() + ", " + myPriority;
+        }
+    }
+
+
     private Node[] contents;
     private int size;
 
@@ -229,28 +254,6 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         }
     }
 
-    private class Node {
-        private T myItem;
-        private double myPriority;
-
-        private Node(T item, double priority) {
-            myItem = item;
-            myPriority = priority;
-        }
-
-        public T item(){
-            return myItem;
-        }
-
-        public double priority() {
-            return myPriority;
-        }
-
-        @Override
-        public String toString() {
-            return myItem.toString() + ", " + myPriority;
-        }
-    }
 
 
     /** Helper function to resize the backing array when necessary. */
