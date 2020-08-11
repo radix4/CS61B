@@ -6,6 +6,18 @@ import static org.junit.Assert.*;
  * store Comparable objects. Instead, it can store any type of object
  * (represented by type T), along with a priority value. Why do it this way? It
  * will be useful later on in the class...
+ *
+ * Invariants:
+ * 1) The root of the tree will be in position 1 of the array (nothing is at position 0).
+ * We can define the position of every other node in the tree recursively:
+ * 2) The left child of a node at position n is at position 2n.
+ * 3) The right child of a node at position n is at position 2n + 1.
+ * 4) The parent of a node at position n is at position n/2.
+ * 5) The tree must be complete.
+ * 6) Every node is smaller than its descendants
+ * (there is another variation called a binary max heap where every node is greater than its descendants)
+ * Meaning that Invariant 2 guarantees that the min element will always be at the root of the tree.
+ * This helps us access that item quickly, which is what we need for a priority queue.
  */
 public class ArrayHeap<T> implements ExtrinsicPQ<T> {
 
@@ -53,7 +65,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     private static int leftIndex(int i) {
         /* TODO: Your code here! */
-        return 0;
+        return 2 * i;
     }
 
     /**
@@ -61,7 +73,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     private static int rightIndex(int i) {
         /* TODO: Your code here! */
-        return 0;
+        return 2 * i + 1;
     }
 
     /**
@@ -69,7 +81,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     private static int parentIndex(int i) {
         /* TODO: Your code here! */
-        return 0;
+        return Math.floorDiv(i,2);
     }
 
     /**
