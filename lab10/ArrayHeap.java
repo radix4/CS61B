@@ -144,19 +144,52 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
 
-        /** TODO: Your code here. */
-        return;
+        /* TODO: Your code here. */
+        int parentIndex = parentIndex(index);
+        if (parentIndex == 0) { // base case
+            return;
+        }
+        if (min(index, parentIndex) == index) {
+            swap(index, parentIndex);
+            swim(parentIndex);  // recursively until base case
+        }
     }
 
     /**
      * Bubbles down the node currently at the given index.
+     * Can be either at the left or right leaf, don't matter, as long as its at the bottom.
      */
     private void sink(int index) {
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
 
-        /** TODO: Your code here. */
-        return;
+        /* TODO: Your code here. */
+
+        int leftIndex = leftIndex(index);
+        int rightIndex = rightIndex(index);
+
+        boolean hasLeft = leftIndex <= size;
+        boolean hasRight = rightIndex <= size;
+
+        if (!hasLeft) { // Have sank down to the bottom
+            return;
+        }
+
+        // if left index is lower, enters the condition
+        if (min(index, leftIndex) == leftIndex) {
+            if (hasRight && min(leftIndex, rightIndex) == rightIndex) {
+                swap(index, rightIndex);    // swaps the indexes so that it continues to travel down
+                sink(rightIndex);
+            } else {
+                swap(index, leftIndex); // swaps the indexes so that it continues to travel down
+                sink(leftIndex);
+            }
+        }
+        if (hasRight && min(index, rightIndex) == rightIndex) {
+            // There is no case when `leftVsRight == leftIndex
+            swap(index, rightIndex);
+            sink(rightIndex);
+        }
     }
 
     /**
