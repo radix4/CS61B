@@ -204,6 +204,11 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         }
 
         /* TODO: Your code here! */
+        Node node = new Node(item, priority);
+        int endOfArrayListIndex = size + 1;
+        contents[endOfArrayListIndex] = node;
+        size++;
+        swim(endOfArrayListIndex);
     }
 
     /**
@@ -213,7 +218,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     @Override
     public T peek() {
         /* TODO: Your code here! */
-        return null;
+        return contents[1].myItem;
     }
 
     /**
