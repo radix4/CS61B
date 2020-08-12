@@ -211,6 +211,17 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         swim(endOfArrayListIndex);
     }
 
+    public void insert(Node node, int index) {
+        /* If the array is totally full, resize. */
+        if (size + 1 == contents.length) {
+            resize(contents.length * 2);
+        }
+
+        /* TODO: Your code here! */
+        contents[index] = node;
+        size++;
+    }
+
     /**
      * Returns the Node with the smallest priority value, but does not remove it
      * from the heap. To implement this, return the item in the 1st position of the ArrayList.
@@ -267,7 +278,26 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         /* TODO: Your code here! */
         Node node = new Node(item,priority);
 
-        return;
+        for (int i = 1; i <= size; i++) {
+            if (getNode(i) == null) {
+                continue;
+            }
+
+            if (getNode(i).item().equals(item)) {
+                insert(node, i);    // insert new node at index i
+
+                int parent = parentIndex(i);
+
+
+                if (min(parent, i) == parent) {
+                    swim(i);
+                } else {
+                    sink(i);
+                }
+
+                return;
+            }
+        }
     }
 
     /**
