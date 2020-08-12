@@ -233,7 +233,16 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     @Override
     public T removeMin() {
         /* TODO: Your code here! */
-        return null;
+        T rootItem = peek();
+
+        int lastIndex = size;
+
+        swap(1, lastIndex);     // swap the root index with the last index.
+        contents[lastIndex] = null;
+        if (size > 0) sink(1);
+        size--;
+
+        return rootItem;
     }
 
     /**
@@ -256,6 +265,8 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     @Override
     public void changePriority(T item, double priority) {
         /* TODO: Your code here! */
+        Node node = new Node(item,priority);
+
         return;
     }
 
