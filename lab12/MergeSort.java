@@ -1,5 +1,11 @@
 import edu.princeton.cs.algs4.Queue;
 
+/**
+ *  A Merge Sort implementation.
+ *
+ *  @author Thang Cao
+ */
+
 public class MergeSort {
     /**
      * Removes and returns the smallest item that is in q1 or q2.
@@ -62,5 +68,18 @@ public class MergeSort {
             Queue<Item> items) {
         // Your code here!
         return items;
+    }
+
+
+    public static void main(String[] args) {
+        Queue<Integer> numbers = new Queue<>();
+        numbers.enqueue(5);
+        numbers.enqueue(4);
+        numbers.enqueue(9);
+        numbers.enqueue(6);
+        numbers.enqueue(1);
+
+        System.out.println(numbers);
+
     }
 }
