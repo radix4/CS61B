@@ -1,4 +1,6 @@
 import edu.princeton.cs.algs4.Queue;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *  A Merge Sort implementation.
@@ -40,8 +42,43 @@ public class MergeSort {
     /** Returns a queue of queues that each contain one item from items. */
     private static <Item extends Comparable> Queue<Queue<Item>>
             makeSingleItemQueues(Queue<Item> items) {
-        // Your code here!
+
+
         return null;
+    }
+
+    /** Returns a queue of size 1 queues, each has 1 item. */
+    @Test
+    public void testMakeSingleItemQueues(){
+        Queue<Integer> numbers = new Queue<>();
+        numbers.enqueue(1);
+        numbers.enqueue(2);
+        numbers.enqueue(3);
+
+        Queue<Queue<Integer>> q = MergeSort.makeSingleItemQueues(numbers);
+
+        assertEquals(3, q.size());
+
+        Queue<Integer> q1 = q.dequeue();
+        Queue<Integer> q2 = q.dequeue();
+        Queue<Integer> q3 = q.dequeue();
+
+        int num1 = q1.peek();
+        int num2 = q2.peek();
+        int num3 = q3.peek();
+
+
+        assertEquals(1, num1);
+        assertEquals(2, num2);
+        assertEquals(3, num3);
+
+        int size1 = q1.size();
+        int size2 = q2.size();
+        int size3 = q3.size();
+
+        assertEquals(1, size1);
+        assertEquals(2, size2);
+        assertEquals(3, size3);
     }
 
     /**
@@ -78,6 +115,8 @@ public class MergeSort {
         numbers.enqueue(9);
         numbers.enqueue(6);
         numbers.enqueue(1);
+
+        MergeSort.mergeSort(numbers);
 
         System.out.println(numbers);
 
