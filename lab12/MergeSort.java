@@ -39,7 +39,7 @@ public class MergeSort {
         }
     }
 
-    /** Returns a queue of queues that each contain one item from items. */
+    /** @return      a queue of queues that each contain one item. */
     private static <Item extends Comparable> Queue<Queue<Item>>
             makeSingleItemQueues(Queue<Item> items) {
         if (items == null || items.isEmpty()) throw new IllegalArgumentException();
@@ -105,8 +105,47 @@ public class MergeSort {
      */
     private static <Item extends Comparable> Queue<Item> mergeSortedQueues(
             Queue<Item> q1, Queue<Item> q2) {
-        // Your code here!
-        return null;
+        if ((q1 == null || q1.isEmpty()) && (q2 == null || q2.isEmpty()))
+            throw new IllegalArgumentException();
+        if (q1 == null || q1.isEmpty()) return q2;
+        if (q2 == null || q2.isEmpty()) return q1;
+
+        Queue<Item> result = new Queue<>();
+
+        while (!(q1.isEmpty() && q2.isEmpty())) {
+            result.enqueue(MergeSort.getMin(q1,q2));
+        }
+
+        return result;
+    }
+
+    @Test
+    public void testMergeSortedQueues(){
+        Queue<Integer> numbers1 = new Queue<>();
+        Queue<Integer> numbers2 = new Queue<>();
+
+        numbers1.enqueue(1);
+        numbers1.enqueue(2);
+        numbers2.enqueue(3);
+        numbers2.enqueue(4);
+
+        Queue<Integer> numbers = MergeSort.mergeSortedQueues(numbers1, numbers2);
+
+        assertEquals(4, numbers.size());
+
+        int num1 = numbers.dequeue();
+        assertEquals(1, num1);
+
+        int num2 = numbers.dequeue();
+        assertEquals(2, num2);
+
+        int num3 = numbers.dequeue();
+        assertEquals(3, num3);
+
+        int num4 = numbers.dequeue();
+        assertEquals(4, num4);
+
+
     }
 
     /** Returns a Queue that contains the given items sorted from least to greatest. */
