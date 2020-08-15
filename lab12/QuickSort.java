@@ -1,4 +1,12 @@
 import edu.princeton.cs.algs4.Queue;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+/**
+ *  A QuickSort algorithm implementation.
+ *
+ *  @author Thang Cao
+ */
 
 public class QuickSort {
     /**
@@ -48,6 +56,51 @@ public class QuickSort {
             Queue<Item> unsorted, Item pivot,
             Queue<Item> less, Queue<Item> equal, Queue<Item> greater) {
         // Your code here!
+
+        while (!unsorted.isEmpty()) {
+            Item item = unsorted.dequeue();
+            int cmp = item.compareTo(pivot);
+
+            if (cmp < 0) less.enqueue(item);
+            else if (cmp > 0) greater.enqueue(item);
+            else equal.enqueue(item);
+        }
+    }
+
+    @Test
+    public void testPartition(){
+        Queue<Integer> unsorted = new Queue<>();
+        unsorted.enqueue(5);
+        unsorted.enqueue(4);
+        unsorted.enqueue(2);
+        unsorted.enqueue(1);
+        unsorted.enqueue(3);
+
+        int pivot = 3;
+
+        Queue<Integer> less = new Queue<>();
+        Queue<Integer> equal = new Queue<>();
+        Queue<Integer> greater = new Queue<>();
+
+        partition(unsorted, pivot, less, equal, greater);
+
+
+        while (!less.isEmpty()) {
+            int item = less.dequeue();
+            assertTrue(item < pivot);
+        }
+
+        while (!equal.isEmpty()) {
+            int item = equal.dequeue();
+            assertEquals(item, pivot);
+        }
+
+        while (!greater.isEmpty()) {
+            int item = greater.dequeue();
+            assertTrue(item > pivot);
+        }
+
+
     }
 
     /** Returns a Queue that contains the given items sorted from least to greatest. */
@@ -55,5 +108,16 @@ public class QuickSort {
             Queue<Item> items) {
         // Your code here!
         return items;
+    }
+
+    public static void main(String[] args) {
+        Queue<Integer> numbers = new Queue<>();
+        numbers.enqueue(5);
+        numbers.enqueue(4);
+        numbers.enqueue(2);
+        numbers.enqueue(1);
+        numbers.enqueue(3);
+
+        System.out.println(QuickSort.quickSort(numbers));
     }
 }
