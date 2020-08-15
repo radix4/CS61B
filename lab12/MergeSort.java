@@ -151,8 +151,47 @@ public class MergeSort {
     /** Returns a Queue that contains the given items sorted from least to greatest. */
     public static <Item extends Comparable> Queue<Item> mergeSort(
             Queue<Item> items) {
-        // Your code here!
-        return items;
+
+        Queue<Queue<Item>> bunchOfSingleItemQueues = MergeSort.makeSingleItemQueues(items);
+        Queue<Item> firstSortedHalf = new Queue<>();
+        Queue<Item> secondSortedHalf = new Queue<>();
+
+        int leftSize = bunchOfSingleItemQueues.size() / 2;
+        for (int i = 0; i < leftSize; i++) {
+            firstSortedHalf = MergeSort.mergeSortedQueues(firstSortedHalf,bunchOfSingleItemQueues.dequeue());
+        }
+
+        int rightSize = bunchOfSingleItemQueues.size();
+        for (int i = 0; i < rightSize; i++) {
+            secondSortedHalf = MergeSort.mergeSortedQueues(secondSortedHalf, bunchOfSingleItemQueues.dequeue());
+        }
+
+
+        return mergeSortedQueues(firstSortedHalf, secondSortedHalf);
+    }
+
+    @Test
+    public void testMergeSort(){
+        Queue<Integer> numbers = new Queue<>();
+        numbers.enqueue(5);
+        numbers.enqueue(4);
+        numbers.enqueue(9);
+        numbers.enqueue(6);
+        numbers.enqueue(1);
+
+        Queue<Integer> sorted = MergeSort.mergeSort(numbers);
+
+        int num1 = sorted.dequeue();
+        int num2 = sorted.dequeue();
+        int num3 = sorted.dequeue();
+        int num4 = sorted.dequeue();
+        int num5 = sorted.dequeue();
+
+        assertEquals(1, num1);
+        assertEquals(4, num2);
+        assertEquals(5, num3);
+        assertEquals(6, num4);
+        assertEquals(9, num5);
     }
 
 
@@ -164,9 +203,7 @@ public class MergeSort {
         numbers.enqueue(6);
         numbers.enqueue(1);
 
-        MergeSort.mergeSort(numbers);
-
-        System.out.println(numbers);
+        System.out.println(MergeSort.mergeSort(numbers));
 
     }
 }
