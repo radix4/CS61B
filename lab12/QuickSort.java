@@ -106,8 +106,23 @@ public class QuickSort {
     /** Returns a Queue that contains the given items sorted from least to greatest. */
     public static <Item extends Comparable> Queue<Item> quickSort(
             Queue<Item> items) {
-        // Your code here!
-        return items;
+
+        if (items.size() <= 1) return items; // base case, when a queue is sorted, size = 1.
+
+        Queue<Item> less = new Queue<>();
+        Queue<Item> equal = new Queue<>();
+        Queue<Item> greater = new Queue<>();
+        Item pivot = getRandomItem(items);
+
+        partition(items, pivot, less, equal, greater);
+
+        Queue<Item> sortedLess = quickSort(less);
+        Queue<Item> sortedGreater = quickSort(greater);
+
+        Queue<Item> sortedQueue = catenate(sortedLess, equal);
+        sortedQueue = catenate(sortedQueue, sortedGreater);
+
+        return sortedQueue;
     }
 
     public static void main(String[] args) {
